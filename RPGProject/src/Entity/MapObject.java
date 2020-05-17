@@ -206,12 +206,12 @@ public abstract class MapObject {
     public void draw(GraphicsContext gc)
     {
                 if(!faceRight) {
-            gc.drawImage(animation.getImage(),x-xmap+width/2,y-ymap-height/2,-width,height);
+            gc.drawImage(animation.getImage(),x-xmap+width/2,y-ymap-cheight/2-10,-width,height);
 
         }
         else
         {
-            gc.drawImage(animation.getImage(),x-xmap-width/2,y-ymap-height/2,width,height);
+            gc.drawImage(animation.getImage(),x-xmap-width/2,y-ymap-cheight/2-10,width,height);
 
         }
     }

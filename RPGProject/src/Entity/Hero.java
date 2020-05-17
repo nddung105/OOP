@@ -4,6 +4,8 @@ import Map.TileMap;
 import accesories.HeroClass;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.skin.ProgressBarSkin;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
@@ -28,13 +30,14 @@ public class Hero extends MapObject {
     public Hero(TileMap tileMap) {
         super(tileMap);
 
+
         width=40;
-        height=40;
-        cheight=40;
+        height=44;
+        cheight=32;
         cwidth=30;
 
         veclocity=0.3;
-        maxVec=1.0;
+        maxVec=20;
 
         faceRight=true;
         faceDown=true;

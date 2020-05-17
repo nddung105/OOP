@@ -20,13 +20,18 @@ import java.io.FileNotFoundException;
 
 public class RPGButton  extends Button {
     private final String FONT_LOCATION="src/accesories/resources/Kenney Rocket.ttf";
-    public RPGButton(String text) throws FileNotFoundException {
-       setText(text);
+    public RPGButton(String text)  {
+       try{
+        setText(text);
        setFont(Font.loadFont(new FileInputStream(FONT_LOCATION),19));
        Image image=new Image(new FileInputStream("src/accesories/resources/buttonLong_beige.png"),190,49,false,true);
        setPadding(Insets.EMPTY);
        BackgroundImage backgroundImage=new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
        setBackground(new Background(backgroundImage));
+       }catch (FileNotFoundException e)
+       {
+           e.printStackTrace();
+       }
        setPrefHeight(49);
        setPrefWidth(190);
        mouseListener();

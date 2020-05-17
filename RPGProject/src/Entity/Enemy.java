@@ -8,6 +8,7 @@ import javafx.scene.image.WritableImage;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Enemy extends MapObject {
 
@@ -34,9 +35,6 @@ public class Enemy extends MapObject {
 
         Image[] movingHero=new Image[4];
         try{
-
-
-
             for(int i=0;i<4;i++)
             {
                 Image origin=new Image(new FileInputStream("src/Entity/monkMovingFrames/tile00"+i+".png"));
@@ -126,7 +124,6 @@ public class Enemy extends MapObject {
     }
     public void update(Hero hero)
     {
-
         //update position
         detectHero(hero);
         checkTileMapCollision();//and update constraint X Y stimultaneously// real X, real Y
@@ -158,9 +155,6 @@ public class Enemy extends MapObject {
         if(left) faceRight=false;
         if(up) faceDown =false;
         if(down) faceDown=true;
-
-
-
     }
     public void draw(GraphicsContext gc)
     {

@@ -8,7 +8,8 @@ import HUD.MainGameWindow.*;
 import java.io.*;
 
 public class TileMap {
-    public final int GAMEPANEL_SIZE=480;
+    public final int GAMEPANEL_SIZE_X;
+    public final int GAMEPANEL_SIZE_Y;
 
     //position
     private double x;
@@ -42,12 +43,13 @@ public class TileMap {
     private int rowToDraw;
     private int colToDraw;
 
-    public TileMap(int tileSize)
+    public TileMap(int tileSize,int sizeX,int sizeY)
     {
      this.tileSize=tileSize;
-     rowToDraw=GAMEPANEL_SIZE /tileSize+2;
-     colToDraw=GAMEPANEL_SIZE/tileSize+2;
-
+     GAMEPANEL_SIZE_X=sizeX;
+     GAMEPANEL_SIZE_Y=sizeY;
+     rowToDraw=GAMEPANEL_SIZE_Y /tileSize+2;
+     colToDraw=GAMEPANEL_SIZE_X/tileSize+2;
     }
     public void loadTile(String s)
     {
@@ -74,10 +76,7 @@ public class TileMap {
 
                 }
             }
-
-
         }
-
         catch (Exception e)
         {
             e.printStackTrace();
@@ -96,10 +95,10 @@ public class TileMap {
             numRows=Integer.parseInt(br.readLine());
             width = numCols * tileSize;
             height = numRows * tileSize;
-            xmin = 0;// size cua cancas la GAMEPANEL_SIZE,GAMEPANEL_SIZE
-            xmax = width-GAMEPANEL_SIZE;
+            xmin = 0;
+            xmax = width-GAMEPANEL_SIZE_X;
             ymin = 0;
-            ymax = height-GAMEPANEL_SIZE;
+            ymax = height-GAMEPANEL_SIZE_Y;
 
             map=new int[numRows][numCols];
             //layer2
@@ -130,18 +129,16 @@ public class TileMap {
                     layer2[row][col]=Integer.parseInt(tokens[col]);
                 }
             }
-            //layer 3
-//            for(int row =0 ;row<numRows ;row++)
-//            {
-//                String line=br.readLine();
-//                String[] tokens=line.split(",");
-//                for(int col=0;col<numCols;col++)
-//                {
-//                    layer3[row][col]=Integer.parseInt(tokens[col]);
-//                }
-//            }
 
-
+            for(int row =0 ;row<numRows ;row++)
+            {
+                String line=br.readLine();
+                String[] tokens=line.split(",");
+                for(int col=0;col<numCols;col++)
+                {
+                    layer3[row][col]=Integer.parseInt(tokens[col]);
+                }
+            }
         }
         catch (Exception e)
         {
