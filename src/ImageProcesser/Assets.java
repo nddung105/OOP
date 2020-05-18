@@ -9,6 +9,9 @@ public class Assets {
 
     public static Image itemsheet;
     public static Image kiemcui,kiemhong;
+    public static Image muphuthuy;
+    public static Image giaycodong;
+    public static Image giapgai;
 
     public static void init(){
         {
@@ -20,8 +23,12 @@ public class Assets {
         }
 
         SpriteSheet s = new SpriteSheet(itemsheet);
-        kiemhong=s.crop(0,1);
-        kiemcui =s.crop(0,2);
+        kiemhong=s.crop(1,0);
+        kiemcui =s.crop(2,0);
+        muphuthuy=s.crop(7,14);
+        giaycodong=s.crop(7,20);
+        giapgai=s.crop(6,8);
+
 
     }
 }
