@@ -19,8 +19,29 @@ import java.util.ArrayList;
 public class Hero extends MapObject {
     //hero attributes
     private HeroClass heroClass;
-    private int health;
+    private final int HEALTH_DEFAULT=100,DAME_DEFAULT=100,
+                      DEF_DEFAULT=50,CRIT_DEFAULT=100,
+                      MAGICALDAME_DEFAULT=100, MAGICALDEL_DEFAULT=100;
+    private final double ATTACKSPEED_DEFAULT=1.0, HPHEALINGPERSEC_DEFAULT=1.0,
+                         MPHEALINGPERSEC_DEFAULT=1.0,SPEEDUP_DEFAULT=0,
+                         POWERUP_DEFAULT=0;
+    private int health=HEALTH_DEFAULT;
+    private int level=1;
+    private int dame=DAME_DEFAULT;
+    private int def=DEF_DEFAULT;
+    private int crit=CRIT_DEFAULT;
+    private double attackspeed=ATTACKSPEED_DEFAULT;
+    private int magicaldame=MAGICALDAME_DEFAULT;
+    private int magicaldef=MAGICALDEL_DEFAULT;
+    private double hphealingpersec=HPHEALINGPERSEC_DEFAULT;
+    private double mphealingpersec=MPHEALINGPERSEC_DEFAULT;
+    private double speedup=SPEEDUP_DEFAULT;
+    private double powerup=POWERUP_DEFAULT;
+    private boolean dead =false;
 
+
+    //inventory
+    Inventory inven = new Inventory();
     //hero animation
 
     private ArrayList<Image[]> sprites=new ArrayList<>(); // consists of moving frame, attaking frame , idle frame ....
@@ -37,7 +58,7 @@ public class Hero extends MapObject {
         cwidth=23;
 
         veclocity=0.3;
-        maxVec=3.0;
+        maxVec=2.0;
 
         faceRight=true;
         faceDown=true;
@@ -121,9 +142,55 @@ public class Hero extends MapObject {
 
 
     }
+    public void returnWeaponIndex(){
+        this.dame=DAME_DEFAULT;
+        this.crit=CRIT_DEFAULT;
+        this.magicaldame=MAGICALDAME_DEFAULT;
+        this.attackspeed=ATTACKSPEED_DEFAULT;
+    }
+    public void returnCapIndex(){
+        this.health=HEALTH_DEFAULT;
+        this.def=DEF_DEFAULT;
+        this.magicaldef=MAGICALDEL_DEFAULT;
+    }
+    public void returnBootIndex(){
+        this.speedup=SPEEDUP_DEFAULT;
+        this.powerup=POWERUP_DEFAULT;
+    }
+    public void returnArmorIndex(){
+        this.health=HEALTH_DEFAULT;
+        this.def=DEF_DEFAULT;
+        this.magicaldef=MAGICALDEL_DEFAULT;
+    }
+
     public void update()
     {
-
+        //update inventory
+        for (int i=0;i<inven.getInventoryItems().size();i++){
+            if(inven.getInventoryItems().get(i).isEquipped()&&!inven.getInventoryItems().get(i).isAddedindex()){
+            if (inven.getInventoryItems().get(i).getType().compareTo("Weapon")==0){
+                this.dame=DAME_DEFAULT+inven.getInventoryItems().get(i).getDame();
+                this.crit=CRIT_DEFAULT+inven.getInventoryItems().get(i).getCrit();
+                this.magicaldame=MAGICALDAME_DEFAULT+inven.getInventoryItems().get(i).getMagicaldame();
+                this.attackspeed=ATTACKSPEED_DEFAULT+inven.getInventoryItems().get(i).getAttackspeed();
+            }
+            else if (inven.getInventoryItems().get(i).getType().compareTo("Cap")==0){
+                this.health=HEALTH_DEFAULT+inven.getInventoryItems().get(i).getHealth();
+                this.def=DEF_DEFAULT+inven.getInventoryItems().get(i).getDef();
+                this.magicaldef=MAGICALDEL_DEFAULT+inven.getInventoryItems().get(i).getMagicaldef();
+            }
+            else if (inven.getInventoryItems().get(i).getType().compareTo("Boot")==0){
+                this.speedup=SPEEDUP_DEFAULT+inven.getInventoryItems().get(i).getSpeedup();
+                this.powerup=POWERUP_DEFAULT+inven.getInventoryItems().get(i).getPowerup();
+            }
+            else if (inven.getInventoryItems().get(i).getType().compareTo("Armor")==0){
+                this.health=HEALTH_DEFAULT+inven.getInventoryItems().get(i).getHealth();
+                this.def=DEF_DEFAULT+inven.getInventoryItems().get(i).getDef();
+                this.magicaldef=MAGICALDEL_DEFAULT+inven.getInventoryItems().get(i).getMagicaldef();
+            }
+            inven.getInventoryItems().get(i).setAddedindex(true);
+            }
+        }
         //update position
         getNextPosition();
         checkTileMapCollision();//and update constraint X Y stimultaneously// real X, real Y
@@ -158,7 +225,9 @@ public class Hero extends MapObject {
 
 
 
+
     }
+
     public void draw(GraphicsContext gc)
     {
         setLocalMapPosition();
@@ -197,5 +266,19 @@ public class Hero extends MapObject {
         anchorPane.getChildren().add(rectangle2D);
     }
 
+    public boolean isDead() {
+        return dead;
+    }
 
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public Inventory getInven() {
+        return inven;
+    }
+
+    public int getDame() {
+        return dame;
+    }
 }

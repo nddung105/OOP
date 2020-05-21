@@ -44,14 +44,19 @@ public class  Item {
 
     protected int x,y,count;
     protected boolean pickedUp=false;
+    protected boolean equipped=false;
+    protected boolean addedindex=false;
 
 
 
-    public static Item kiemcui = new Item(Assets.kiemcui,"Kiem Cui","Weapon",300,20,0,1.1,2);
-    public static Item kiemhong = new Item(Assets.kiemhong,"Kiem Hong","Weapon",100,0,0,1.0,1);
+    public static Item kiemcui = new Item(Assets.kiemcui,"Kiếm Cùi","Weapon",300,20,0,1.1,2);
+    public static Item kiemhong = new Item(Assets.kiemhong,"Kiếm Hỏng","Weapon",100,0,0,1.0,1);
+    public static Item muphuthuy =new Item(Assets.muphuthuy,"Mũ Phù Thủy","Cap",1000,200,0,3);
+    public static Item giaycodong =new Item(Assets.giaycodong,"Giày Cơ Động","Boot",0.4,100,4);
+    public static Item giapgai = new Item(Assets.giapgai,"Giáp Gai","Armor",4000,800,100,5);
     //method
 
-    //Khai bao danh cho Gang Tay &&Giap &&Nhan && Shield
+    //Khai bao danh cho Gang Tay &&Giap &&Nhan && Shield &&Mu
     public Item(Image texture,String name,String type,int health,int def,int magicaldef,int id){
 
         this.texture=texture;
@@ -60,6 +65,20 @@ public class  Item {
         this.health=health;
         this.magicaldef=magicaldef;
         this.def=def;
+        this.id=id;
+        count=1;
+
+        bounds = new Rectangle(x,y,WIDTH,HEIGHT);
+        items[id]=this;
+    }
+    //Khai bao cho giay
+    public Item(Image texture,String name,String type,double speedup,double powerup,int id){
+
+        this.texture=texture;
+        this.name=name;
+        this.type =type;
+        this.speedup=speedup;
+        this.powerup=powerup;
         this.id=id;
         count=1;
 
@@ -119,6 +138,18 @@ public class  Item {
         i.setCount(count);
         return i;
     }
+    public Item createNewCap(int count){
+        Item i= new Item(texture,name,type,health,def,magicaldef,id);
+        i.setPickedUp(true);
+        i.setCount(count);
+        return i;
+    }
+    public Item createNewBoot(int count){
+        Item i= new Item(texture,name,type,speedup,powerup,id);
+        i.setPickedUp(true);
+        i.setCount(count);
+        return i;
+    }
 
     public Item createNew(int x,int y){
         Item i =new Item(texture,name,type,dame,crit,magicaldame,attackspeed,id);
@@ -130,6 +161,14 @@ public class  Item {
         this.y=y;
         bounds.setX(x);
         bounds.setY(y);
+    }
+
+    public boolean isEquipped() {
+        return equipped;
+    }
+
+    public void setEquipped(boolean equipped) {
+        this.equipped = equipped;
     }
 
     public String getName() {
@@ -182,5 +221,69 @@ public class  Item {
 
     public void setPickedUp(boolean pickedUp) {
         this.pickedUp = pickedUp;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getDame() {
+        return this.dame;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getDef() {
+        return def;
+    }
+
+    public int getCrit() {
+        return crit;
+    }
+
+    public double getAttackspeed() {
+        return attackspeed;
+    }
+
+    public int getMagicaldame() {
+        return magicaldame;
+    }
+
+    public int getMagicaldef() {
+        return magicaldef;
+    }
+
+    public int getHphealingpersec() {
+        return hphealingpersec;
+    }
+
+    public int getMphealingpersec() {
+        return mphealingpersec;
+    }
+
+    public int getTimehealing() {
+        return timehealing;
+    }
+
+    public double getSpeedup() {
+        return speedup;
+    }
+
+    public double getPowerup() {
+        return powerup;
+    }
+
+    public boolean isAddedindex() {
+        return addedindex;
+    }
+
+    public void setAddedindex(boolean addedindex) {
+        this.addedindex = addedindex;
     }
 }

@@ -1,5 +1,6 @@
 package sample;
 
+import HUD.LoadingScence;
 import HUD.Menu;
 import HUD.refreshMenu;
 import javafx.application.Application;
@@ -13,8 +14,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         refreshMenu menu=new refreshMenu();
+//        LoadingScence loadingScence=new LoadingScence(menu.getPrimaryWindow());
+//        primaryStage=loadingScence.getLoadingStage();
 
+        //xxx
         primaryStage=menu.getPrimaryWindow();
+
         primaryStage.setResizable(false);
         primaryStage.show();
 
