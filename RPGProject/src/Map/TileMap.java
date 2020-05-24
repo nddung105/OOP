@@ -8,10 +8,10 @@ import HUD.MainGameWindow.*;
 import java.io.*;
 
 public class TileMap {
-    public final int GAMEPANEL_SIZE_X;
-    public final int GAMEPANEL_SIZE_Y;
+    public final int GAMEPANEL_SIZE_WIDTH;
+    public final int GAMEPANEL_SIZE_HEIGHT;
 
-    //position
+    //camera position
     private double x;
     private double y;
 
@@ -31,6 +31,10 @@ public class TileMap {
     private int width;
     private int height;
 
+    //spawn point
+    public int spawnX;
+    public int spawnY;
+
     //tileset
     private Image tileset;
     private int numTileHorizontal;
@@ -43,13 +47,14 @@ public class TileMap {
     private int rowToDraw;
     private int colToDraw;
 
-    public TileMap(int tileSize,int sizeX,int sizeY)
+    public TileMap(int tileSize,int camWidth,int camHeight)
     {
      this.tileSize=tileSize;
-     GAMEPANEL_SIZE_X=sizeX;
-     GAMEPANEL_SIZE_Y=sizeY;
-     rowToDraw=GAMEPANEL_SIZE_Y /tileSize+2;
-     colToDraw=GAMEPANEL_SIZE_X/tileSize+2;
+     this.GAMEPANEL_SIZE_HEIGHT=camHeight;
+     this.GAMEPANEL_SIZE_WIDTH=camWidth;
+     rowToDraw=GAMEPANEL_SIZE_HEIGHT /tileSize+2;
+     colToDraw=GAMEPANEL_SIZE_WIDTH/tileSize+2;
+
     }
     public void loadTile(String s)
     {
@@ -76,14 +81,17 @@ public class TileMap {
 
                 }
             }
+
+
         }
+
         catch (Exception e)
         {
             e.printStackTrace();
         }
     }
-    private int layer2[][];//extra layer for decorations
-    private int layer3[][];
+    private int layer2[][];
+    private int layer3[][];//extra layer for decorations
 
     public void loadMap(String s)
     {
@@ -93,12 +101,14 @@ public class TileMap {
             BufferedReader br=new BufferedReader(new InputStreamReader(in));
             numCols=Integer.parseInt(br.readLine());
             numRows=Integer.parseInt(br.readLine());
+            spawnX=Integer.parseInt(br.readLine());
+            spawnY=Integer.parseInt(br.readLine());
             width = numCols * tileSize;
             height = numRows * tileSize;
             xmin = 0;
-            xmax = width-GAMEPANEL_SIZE_X;
+            xmax = width-GAMEPANEL_SIZE_WIDTH;
             ymin = 0;
-            ymax = height-GAMEPANEL_SIZE_Y;
+            ymax = height-GAMEPANEL_SIZE_HEIGHT;
 
             map=new int[numRows][numCols];
             //layer2
@@ -109,7 +119,7 @@ public class TileMap {
             width=numCols*tileSize;
             height=numRows*tileSize;
 
-            //basic layer for movement
+            //background
             for(int row =0 ;row<numRows ;row++)
             {
                 String line=br.readLine();
@@ -119,7 +129,7 @@ public class TileMap {
                     map[row][col]=Integer.parseInt(tokens[col]);
                 }
             }
-            //layer 2
+            //layer 2 colision
             for(int row =0 ;row<numRows ;row++)
             {
                 String line=br.readLine();
@@ -129,16 +139,18 @@ public class TileMap {
                     layer2[row][col]=Integer.parseInt(tokens[col]);
                 }
             }
-
+            //layer 3 deco
             for(int row =0 ;row<numRows ;row++)
-            {
+           {
                 String line=br.readLine();
                 String[] tokens=line.split(",");
                 for(int col=0;col<numCols;col++)
                 {
-                    layer3[row][col]=Integer.parseInt(tokens[col]);
+                   layer3[row][col]=Integer.parseInt(tokens[col]);
                 }
             }
+
+
         }
         catch (Exception e)
         {
@@ -147,10 +159,23 @@ public class TileMap {
     }
     public int getType(int row,int col)
     {
+        if(row<0||col<0||col>39||row>29)
+        {
+            return Tile.BLOCKED;
+        }
+
         //qui doi vi tri tuong ung
-        int rc=layer2[row][col];//va cham layer 2
-        int r = (rc-1) / numTileHorizontal;
-        int c = (rc-1)%numTileHorizontal;
+        int tileIndex=layer2[row][col];//va cham layer 2
+        if(tileIndex==0)
+        {
+            return Tile.NORMAL;
+        }
+
+        int r = (tileIndex-1) / numTileHorizontal;
+
+        int c = (tileIndex-1) % numTileHorizontal;
+
+
         return tiles[r][c].getType();
     }
 
@@ -278,14 +303,23 @@ public class TileMap {
     {
         return tileSize;
     }
-    public double getx()
+
+    public double getX()
     {
         return x;
-
     }
-    public double gety()
+    public double getY()
     {
         return y;
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+    public int getHeight()
+    {
+        return height;
     }
 
 }

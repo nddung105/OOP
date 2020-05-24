@@ -2,8 +2,6 @@ package Entity;
 
 import Map.Tile;
 import Map.TileMap;
-import javafx.application.Platform;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -13,12 +11,13 @@ public abstract class MapObject {
 
     protected TileMap tileMap;
     protected  int tileSize;
-    protected double xmap;//map position
-    protected double ymap;
-    public final int MAP_SIZE=48*100;
+    protected double xCamera;//map position
+    protected double yCamera;
+    public final int MAP_SIZE_WIDTH=32*40;
+    public final int MAP_SIZE_HEIGHT=32*30;
 
     //object position
-    protected double x;// in the tilemap itself
+    protected double x;// in the whole map
     protected double y;
     protected double dx;
     protected double dy;
@@ -36,8 +35,8 @@ public abstract class MapObject {
     protected int currentCol;
     protected  double nextX;//hypothesis
     protected double nextY;
-    protected  double constraintX;//real after move(colision detected or not)
-    protected double constraintY;
+    protected  double updatedX;//real after move(colision detected or not)
+    protected double updatedY;
     protected  boolean topLeft;
     protected boolean topRight;
     protected  boolean bottomLeft;
@@ -52,9 +51,31 @@ public abstract class MapObject {
 
     //movement
     protected boolean left;
+
+    public void setLeftButtonPressed(boolean leftButtonPressed) {
+        this.leftButtonPressed = leftButtonPressed;
+    }
+
+    public void setRightButtonPressed(boolean rightButtonPressed) {
+        this.rightButtonPressed = rightButtonPressed;
+    }
+
+    public void setUpButtonPressed(boolean upButtonPressed) {
+        this.upButtonPressed = upButtonPressed;
+    }
+
+    public void setDownButtonPressed(boolean downButtonPressed) {
+        this.downButtonPressed = downButtonPressed;
+    }
+
     protected boolean right;
     protected boolean up;
     protected boolean down;
+    //keyevent
+    protected boolean leftButtonPressed;
+    protected boolean rightButtonPressed;
+    protected boolean upButtonPressed;
+    protected boolean downButtonPressed;
 
     //movement attribute
     protected  double veclocity;
@@ -66,6 +87,8 @@ public abstract class MapObject {
     {
         this.tileMap=tileMap;
         tileSize=tileMap.getTileSize();
+
+
 
     }
     public boolean collide(MapObject o)
@@ -95,6 +118,8 @@ public abstract class MapObject {
         int topTile=(int)((y-cheight/2+0.0001)/tileSize);
         int bottomTile=(int)(y+cheight/2-0.0001)/tileSize;
 
+
+
         int typeTopLeft=tileMap.getType(topTile,leftTileCorner);
         int typeTopRight=tileMap.getType(topTile,rightTileCorner);
         int typeBottomLeft=tileMap.getType(bottomTile,leftTileCorner);
@@ -106,88 +131,72 @@ public abstract class MapObject {
         this.bottomRight=(typeBottomRight==Tile.BLOCKED);
 
     }
+
     public void checkTileMapCollision()
     {
+
         currentCol=(int)x/tileSize;
         currentRow=(int)y/tileSize;
 
         nextX=x+dx;
         nextY=y+dy;
 
-        constraintX=x;
-        constraintY=y;
-        if(nextX<0||nextX>MAP_SIZE||nextY<0||nextY>MAP_SIZE){
-            if(nextX<0)
-        {
-            constraintX=0;
-        }
-            if(nextX>MAP_SIZE)
-            {
-                constraintX=MAP_SIZE;
-            }
-            if(nextY<0)
-            {
-                constraintY=0;
-            }
-            if(nextY>MAP_SIZE)
-            {
-                constraintY=MAP_SIZE;
-            }
-        }
+        updatedX =x;
+        updatedY =y;
+
+        if(nextX>0+cwidth/2  &&  nextX<MAP_SIZE_WIDTH-cwidth/2) {
 
 
-
-        calculateCorner(x,nextY);
-        if(dy<0)//go upward
-        {
-
-            if(topLeft||topRight)
-            {
-                dy=0;
-                constraintY=currentRow*tileSize+cheight/2;
+            calculateCorner(nextX, y);
+            if (dx > 0) {
+                if (topRight || bottomRight) {
+                    dx = 0;
+                    updatedX = (currentCol + 1) * tileSize - cwidth / 2;
+                } else {
+                    updatedX += dx;
+                }
 
             }
-            else {
-
-                constraintY+=dy;
+            if (dx < 0) {
+                if (topLeft || bottomLeft) {
+                    dx = 0;
+                    updatedX = (currentCol) * tileSize + cwidth / 2;
+                } else {
+                    updatedX += dx;
+                }
             }
+
 
         }
-        if(dy>0)
-        {
-            if(bottomLeft||bottomRight)
+
+        if(nextY>0+cheight/2  &&  nextY<MAP_SIZE_HEIGHT-cheight/2) {
+
+            calculateCorner(x, nextY);
+            if (dy < 0)//go upward
             {
-                dy=0;
-                constraintY=(currentRow+1)*tileSize-cheight/2;
+
+                if (topLeft || topRight) {
+                    dy = 0;
+                    updatedY = currentRow * tileSize + cheight / 2;
+
+                } else {
+
+                    updatedY += dy;
+                }
+
             }
-            else {
-                constraintY+=dy;
-            }
-        }//go right
-        calculateCorner(nextX,y);
-        if(dx>0)
-        {
-         if(topRight||bottomRight)
-         {
-             dx=0;
-             constraintX=(currentCol+1)*tileSize-cwidth/2;
-         }
-         else {
-             constraintX+=dx;
-         }
+            if (dy > 0) {
+                if (bottomLeft || bottomRight) {
+                    dy = 0;
+                    updatedY = (currentRow + 1) * tileSize - cheight / 2;
+                } else {
+                    updatedY += dy;
+                }
+            }//go right
 
         }
-        if(dx<0)
-        {
-            if(topLeft||bottomLeft)
-            {
-                dx=0;
-                constraintX=(currentCol)*tileSize+cwidth/2;
-            }
-            else {
-                constraintX+=dx;
-            }
-        }
+
+
     }
     public void setPosition(double x,double y)
     {
@@ -196,8 +205,8 @@ public abstract class MapObject {
     }
     public void setLocalMapPosition()
     {
-        xmap=tileMap.getx();
-        ymap=tileMap.gety();
+        xCamera=tileMap.getX();
+        yCamera=tileMap.getY();
     }
     public void setLeft(boolean b) { left = b; }
     public void setRight(boolean b) { right = b; }
@@ -206,12 +215,12 @@ public abstract class MapObject {
     public void draw(GraphicsContext gc)
     {
                 if(!faceRight) {
-            gc.drawImage(animation.getImage(),x-xmap+width/2,y-ymap-cheight/2-10,-width,height);
+            gc.drawImage(animation.getImage(),x-xCamera+width/2,y-yCamera-height/2,-width,height);
 
         }
         else
         {
-            gc.drawImage(animation.getImage(),x-xmap-width/2,y-ymap-cheight/2-10,width,height);
+            gc.drawImage(animation.getImage(),x-xCamera-width/2,y-yCamera-height/2,width,height);
 
         }
     }

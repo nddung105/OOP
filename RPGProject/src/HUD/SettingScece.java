@@ -2,8 +2,6 @@ package HUD;
 
 import accesories.RPGButton;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -32,7 +30,7 @@ public class SettingScece extends SubScene {
             e.printStackTrace();
         }
         setLayoutX(1000);
-        setLayoutY(50);
+        setLayoutY(120);
         addButton();
 
 
@@ -43,7 +41,7 @@ public class SettingScece extends SubScene {
         transition.setNode(this);
         if(isVisible==false)
         {
-            transition.setToX(-950);
+            transition.setToX(-720);
             isVisible=true;
         }
         else

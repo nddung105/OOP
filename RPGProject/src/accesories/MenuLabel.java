@@ -19,7 +19,6 @@ public class MenuLabel  extends Label {
         setWrapText(true);
         setFontLabel();
         setAlignment(Pos.TOP_LEFT);
-
     }
 
     private void setFontLabel()

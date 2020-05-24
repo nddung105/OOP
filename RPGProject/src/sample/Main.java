@@ -14,11 +14,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         refreshMenu menu=new refreshMenu();
-        LoadingScence loadingScence=new LoadingScence(menu.getPrimaryWindow());
-        primaryStage=loadingScence.getLoadingStage();
+//        LoadingScence loadingScence=new LoadingScence(menu.getPrimaryWindow());
+//        primaryStage=loadingScence.getLoadingStage();
+
+        //xxx
+        primaryStage=menu.getPrimaryWindow();
+
         primaryStage.setResizable(false);
         primaryStage.show();
+
     }
+
+
     public static void main(String[] args) {
         launch(args);
     }

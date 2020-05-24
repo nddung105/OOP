@@ -23,6 +23,7 @@ public class Menu {
     private RPGButton currentRPGButton=null;
     private RPGSubSence currentRPGSubScece=null;
     public Menu() throws FileNotFoundException {
+
         anchorPane=new AnchorPane();
         scene=new Scene(anchorPane,1000,700);
         primaryWindow=new Stage();
@@ -186,7 +187,7 @@ public class Menu {
         });
     }
     private void createLogo() throws FileNotFoundException {
-        Image image=new Image(new FileInputStream("src/HUD/Reso/contra-png-9.png"));
+        Image image=new Image(new FileInputStream("src/HUD/Reso/logo.png"));
         ImageView logo=new ImageView(image);
        logo.setPreserveRatio(false);
         logo.setFitWidth(200);

@@ -1,13 +1,11 @@
 package HUD;
 
+import ImageProcesser.Assets;
 import accesories.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,12 +13,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.util.Duration;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,14 +24,14 @@ public class refreshMenu {
     private Scene scene;
     private Stage primaryWindow;
     private List<RPGButton> menuButtons=new LinkedList<>();
-    public refreshMenu() throws FileNotFoundException, InterruptedException {
+    public refreshMenu() throws FileNotFoundException {
         anchorPane = new AnchorPane();
         scene = new Scene(anchorPane, 1000, 700);
         primaryWindow = new Stage();
         primaryWindow.setScene(scene);
-
         addBackGround();
         createLogo();
+        Assets.init();
         //hero picker module
         RPGButton HeroButton=new RPGButton("Hero");
         addMenuButton(HeroButton);
@@ -68,10 +63,7 @@ public class refreshMenu {
         return primaryWindow;
     }
     private void createLogo() throws FileNotFoundException {
-
-
-        Image image=new Image(new FileInputStream("src/HUD/Reso/contra-png-9.png"));
-
+        Image image=new Image(new FileInputStream("src/HUD/Reso/logo.png"));
         ImageView logo=new ImageView(image);
         logo.setPreserveRatio(false);
         logo.setFitWidth(200);
@@ -94,20 +86,9 @@ public class refreshMenu {
         anchorPane.getChildren().addAll(logo);
 
     }
-    private void addBackGround()  {
-        Image background=null;
-
-        try {
-            background = new Image(new FileInputStream("src/accesories/resources/MapDemo.png"), 1000, 700, false, true);
-
-        }catch (FileNotFoundException e)
-
-        {
-            e.printStackTrace();
-        }
-        BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, null);
-
-
+    private void addBackGround() throws FileNotFoundException {
+        Image background=new Image(new FileInputStream("src/accesories/resources/MapDemo.png"),1000,700,false,true);
+        BackgroundImage backgroundImage=new BackgroundImage(background, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         anchorPane.setBackground(new Background(backgroundImage));
     }
 
@@ -226,7 +207,8 @@ public class refreshMenu {
     }
     public void createStartButton(RPGSubSence heroPickerScece)
     {
-
+        try
+        {
             RPGButton rpgButton=new RPGButton("Start");
             heroPickerScece.getAnchorRoot().getChildren().add(rpgButton);
             AnchorPane.setTopAnchor(rpgButton,400.0);
@@ -254,13 +236,10 @@ public class refreshMenu {
                     });}
                 }
             });
-
-
+        }catch (FileNotFoundException e)
+        {
+            System.out.println("File loi");
+            e.printStackTrace();
+        }
     }
-
-
-
-
-
-
 }

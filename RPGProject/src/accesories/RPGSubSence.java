@@ -45,26 +45,6 @@ public class RPGSubSence extends SubScene {
         }
         transition.play();
     }
-    public void optionTransition()//in pause-resume
-    {
-        transition.setDuration(Duration.millis(200));
-        setHeight(100);
-        setWidth(150);
-
-        transition.setNode(this);
-        if(isVisible==false)
-        {
-            transition.setToX(-1200);
-            isVisible=true;
-        }
-        else
-        {
-            transition.setToX(0);
-            isVisible=false;
-        }
-        transition.play();
-    }
-
     public boolean getVisible()
     {
         return isVisible;
