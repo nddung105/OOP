@@ -97,7 +97,7 @@ public class Tile extends AStarNode {
                 if ((i == 0 && j == 0) || (i != 0 && j != 0)) {
                     continue;
                 }
-                if(row + i<0 ||row + i>14||column + j<0||column+j>14)
+                if(row + i<0 ||row + i>range-1||column + j<0||column+j>range-1)
                 {
                     continue;
                 }
